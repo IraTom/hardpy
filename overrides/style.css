@@ -1,0 +1,54 @@
+@media print {
+
+    body,
+    html {
+        min-width: 1200px;
+        max-width: 1200px;
+        padding: 0;
+        margin: 0 auto;
+        border: none
+    }
+}
+
+@media screen and (max-width:1024px) {
+
+    a:active,
+    button:active {
+        -webkit-tap-highlight-color: rgba(255, 255, 255, .1)
+    }
+}
+
+
+body {
+    margin:0;
+    background: rgb(32, 32, 32);
+}
+
+.t-cover__wrapper {
+    height: 943.35px;
+    position: relative;
+    z-index: 1;
+}
+
+.text-hardpy-open {
+    color: rgb(255, 255, 255);
+    font-family: Roboto;
+}
+
+.t-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0
+}
+
+/* .t-cover__wrapper {
+    height: 700px;
+    display: table-cell;
+    width: 1200px
+} */
+
+.t-valign_middle {
+    vertical-align: middle
+}
