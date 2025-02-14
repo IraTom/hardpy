@@ -1,5 +1,41 @@
-<!DOCTYPE html>
-<html>
+{% extends "base.html" %}
+
+<!-- Render landing page under tabs -->
+{% block tabs %}
+{{ super() }}
+
+<!-- Additional styles for landing page -->
+<style>
+
+  /* Application header should be static for the landing page */
+  .md-header {
+    position: initial;
+  }
+
+  /* Remove spacing, as we cannot hide it completely */
+  .md-main__inner {
+    margin: 0;
+  }
+
+  /* Hide main content for now */
+  .md-content {
+    display: none;
+  }
+
+  /* Hide table of contents */
+  @media screen and (min-width: 60em) {
+    .md-sidebar--secondary {
+      display: none;
+    }
+  }
+
+  /* Hide navigation */
+  @media screen and (min-width: 76.25em) {
+    .md-sidebar--primary {
+      display: none;
+    }
+  }
+</style>
 
 <head>
   <meta charset="utf-8">
@@ -14,10 +50,10 @@
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://static.tildacdn.com/tild3132-3165-4365-a166-333263666238/_.png">
   <link rel="canonical" href="http://everypin.io/hardpy">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="overrides/style.css">
   <link rel="preconnect" href="https://fonts.gstatic.com/" as="font">
-  <link href="css2.css" rel="stylesheet">
-  <link rel="stylesheet" href="css2(1).css" type="text/css">
+  <link href="overrides/css2.css" rel="stylesheet">
+  <link rel="stylesheet" href="overrides/css2(1).css" type="text/css">
 </head>
 
 
@@ -27,7 +63,7 @@
 
       <div class="t-cover__wrapper .t-valign_middle">
         <div class="align_center">
-          <div class="blocklogo"> <img class="logo" imgfield="img2" src="./HardPy_files/HP.png"
+          <div class="blocklogo"> <img class="logo" imgfield="img2" src="overrides/HardPy_files/HP.png"
               data-animate-style="fadeindown" data-tu-max-width="800" data-tu-max-height="800"
               data-hook-clogo="coverlogo">
           </div>
@@ -225,7 +261,7 @@
               data-tab-content-number="1" aria-labelledby="tab1_841532374" tabindex="0"
               style=" background-color: #ffffff; border-width: 1px;">
               <div class="t817__content-col t817__content-col_2"> <img class="t-img loaded"
-                  src="./HardPy_files/photo_2024-12-10_11-.jpg"
+                  src="overrides/HardPy_files/photo_2024-12-10_11-.jpg"
                   data-original="https://static.tildacdn.com/tild3662-6161-4730-b633-633466623363/photo_2024-12-10_11-.jpg"
                   imgfield="li_img__3529444515830" alt=""> </div>
               <div class="t817__content-col t817__content-col_2" style="padding-top:20px;padding-bottom:20px;">
@@ -238,7 +274,7 @@
               aria-labelledby="tab2_841532374" tabindex="0" hidden=""
               style=" background-color: #ffffff; border-width: 1px;">
               <div class="t817__content-col t817__content-col_2"> <img class="t-img loaded"
-                  src="./HardPy_files/photo_.jpg"
+                  src="overrides/HardPy_files/photo_.jpg"
                   data-original="https://static.tildacdn.com/tild3939-3663-4030-b162-393136356565/photo_.jpg"
                   imgfield="li_img__2901444515831" alt=""> </div>
               <div class="t817__content-col t817__content-col_2" style="padding-top:20px;padding-bottom:20px;">
@@ -339,5 +375,10 @@
 
 
 </body>
+{% endblock %}
 
-</html>
+<!-- Content -->
+{% block content %}{% endblock %}
+
+<!-- Application footer -->
+{% block footer %}{% endblock %}
