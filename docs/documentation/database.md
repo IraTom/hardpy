@@ -16,43 +16,15 @@ The CouchDB version must be equal to or greater than the 3.2 version.
 This section explains how to launch and manage a CouchDB instance.
 After launching the database, it becomes available at the following address:
 
-> http://127.0.0.1:5984/_utils/
+> http://localhost:5984/_utils/
 
 The internal settings of the database are contained in the **couchDB.ini** configuration file.
 It contains settings that define the behavior and operating parameters of the database.
-The username is set via the `COUCHDB_USER`variable, the password via `COUCHDB_PASSWORD`, and the port number via the `ports` section.
-
-### Running CouchDB with Docker
-
-1. Create `couchdb.ini` file.
-
-```ini
-[chttpd]
-enable_cors=true
-
-[cors]
-origins = *
-methods = GET, PUT, POST, HEAD, DELETE
-credentials = true
-headers = accept, authorization, content-type, origin, referer, x-csrf-token
-```
-2. The Docker version must be 24.0.0 or higher. Run the Docker container (from the folder with the couchdb.ini file):
-
-```bash
-docker run --rm --name couchdb -p 5984:5984 -e COUCHDB_USER=dev -e COUCHDB_PASSWORD=dev -v ./couchdb.ini:/opt/couchdb/etc/local.ini couchdb:3.3
-```
-
-Command for Windows:
-
-```bash
-docker run --rm --name couchdb -p 5984:5984 -e COUCHDB_USER=dev -e COUCHDB_PASSWORD=dev -v .\couchdb.ini:/opt/couchdb/etc/local.ini couchdb:3.3.2
-```
-
-The container will be deleted after use.
 
 ### Running CouchDB with Docker Compose
 
-An example configuration for running CouchDB via Docker Compose is located in the `example/database/couchdb` folder.
+An example configuration for running CouchDB via Docker Compose is located in
+the `example/database/couchdb` folder.
 A shortened version of the instructions is described below.
 
 1. Create a `docker` directory in the project's root directory.
@@ -75,7 +47,7 @@ version: "3.8"
 
 services:
   couchserver:
-    image: couchdb:3.3.2
+    image: couchdb:3.4
     ports:
       - "5984:5984"
     environment:
@@ -96,21 +68,53 @@ docker compose up
 docker compose down
 ```
 
+### Running CouchDB with Docker
+
+1. Create `couchdb.ini` file.
+
+```ini
+[chttpd]
+enable_cors=true
+
+[cors]
+origins = *
+methods = GET, PUT, POST, HEAD, DELETE
+credentials = true
+headers = accept, authorization, content-type, origin, referer, x-csrf-token
+```
+2. The Docker version must be 24.0.0 or higher. Run the Docker container (from the folder with the couchdb.ini file):
+
+```bash
+docker run --rm --name couchdb -p 5984:5984 -e COUCHDB_USER=dev -e COUCHDB_PASSWORD=dev -v ./couchdb.ini:/opt/couchdb/etc/local.ini couchdb:3.4
+```
+
+Command for Windows:
+
+```bash
+docker run --rm --name couchdb -p 5984:5984 -e COUCHDB_USER=dev -e COUCHDB_PASSWORD=dev -v .\couchdb.ini:/opt/couchdb/etc/local.ini couchdb:3.4
+```
+
+The container will be deleted after use.
+
 ### Running CouchDB with binary packages in Linux
 
 1. Use this [instruction](https://docs.couchdb.org/en/stable/install/unix.html#installation-using-the-apache-couchdb-convenience-binary-packages) to install CouchDB
-2. The installer asks you if you want to install CouchDB as a standalone application or in a clustered configuration.
+2. The installer asks you if you want to install CouchDB as a standalone
+application or in a clustered configuration.
 Select `Standalone` and press Enter.
 3. You are prompted to enter the Erlang Node Name.
 You can ask it in Terminal with the command `hostname -f`
 4. Set the Erlang Magic Cookie.
 This is a unique identifier, for example, `test1234`
 5. Configure the network interfaces on which CouchDB will be bound.
-`127.0.0.1` is fine.
-6. Enter an admin password of your choice for CouchDB, press `Enter`, re-type the password and press `Enter` again to continue the installation.
-7. After launching the database, it becomes available at the following address http://127.0.0.1:5984/_utils/.
+`localhost` is fine.
+6. Enter an admin password of your choice for CouchDB, press `Enter`, re-type the password
+and press `Enter` again to continue the installation.
+7. After launching the database, it becomes available at the following
+address http://localhost:5984/_utils/.
 Open it.
-8. First of all, in the `User Management` section in the `Create Admins` tab, create a user with the login `dev` and password `dev`
+8. First of all, in the `User Management` section in the `Create Admins` tab,
+create a user with the login `dev` and password `dev`
 9. In the `Config` choose `CORS` and appoint `Enable CORS` with `All domains`
 
 #### To disable the CouchDB service:
@@ -142,7 +146,7 @@ systemctl reset-failed
 2. Be sure to install CouchDB to a path with no spaces, such as `C:\CouchDB`.
 3. Create a user with the login `dev` and password `dev` during the installation steps. Validate Credentials.
 4. Generate Random Cookie.
-5. After launching the database, it becomes available at the following address http://127.0.0.1:5984/_utils/.
+5. After launching the database, it becomes available at the following address http://localhost:5984/_utils/.
 Open it.
 6. In the `Config` choose `CORS` and appoint `Enable CORS` with `All domains`
 
@@ -153,9 +157,11 @@ Open it.
 
 The pytest plugin has 2 databases: **statestore** and **runstore**.
 
-- The **statestore** database contains the document **current**, which is a JSON object that stores the current state of the test run without artifacts.
+- The **statestore** database contains the document **current**, which is a JSON
+object that stores the current state of the test run without artifacts.
 The plugin updates the document as testing progresses using the **StateStore** class.
-- The **runstore** database contains the document **current**, which is a JSON object that stores the current state of the test run with artifacts - a report on the current test run.
+- The **runstore** database contains the document **current**, which is a JSON object
+that stores the current state of the test run with artifacts - a report on the current test run.
 - The plugin updates the document as testing progresses using the **RunStore** class.
 
 A separate database is required to store the list of reports.
@@ -186,25 +192,44 @@ They can write custom classes to record reports at the end of testing.
 
 ### Statestore scheme
 
+<h1 align="center">
+    <img src="https://raw.githubusercontent.com/everypinio/hardpy/main/docs/img/database/statestore.png" alt="statestore_scheme">
+</h1>
+
 The **current** document of the **statestore** database contains the following fields:
 
 - **_rev**: current document revision;
 - **_id**: unique document identifier;
 - **progress**: test progress;
 - **stop_time**: end time of testing in Unix seconds;
-- **timezone**: timezone as a list of strings;
 - **start_time**: testing start time in Unix seconds;
 - **status**: test execution status;
 - **name**: test suite name;
 - **dut**: DUT information containing the serial number and additional information;
-- **test_stand**: information about the test stand in the form of a dictionary.;
+- **test_stand**: information about the test stand in the form of a dictionary;
 - **modules**: module information;
-- **drivers**: information about drivers in the form of a dictionary.
+- **operator_msg**: operator message.
+
+The **test_stand** block containt the following fields:
+
+  - **name** - test stand name;
+  - **drivers**: information about drivers in the form of a dictionary;
+  - **info**: a dictionary containing additional information about the test stand;
+  - **timezone**: timezone as a string;
+  - **location**: test stand location;
+  - **hw_id**: test stand machine id (GUID) or MAC address.
 
 The **dut** block contains the following fields:
 
   - **serial_number**: DUT serial number;
-  - **info**: A dictionary containing additional information about the DUT, such as batch, board revision, etc.
+  - **part_number**: DUT part number;
+  - **info**: a dictionary containing additional information about the DUT, such as batch, board revision, etc.
+
+The **operator_msg** block contains the following fields:
+
+  - **msg**: message for operator;
+  - **title**: the title of operator message dialog box.
+  - **visible**: should a message be displayed on the operator panel.
 
 The **modules** block contains the following fields:
 
@@ -221,44 +246,59 @@ The **modules** block contains the following fields:
         - **stop_time**: test end time in Unix second;
         - **assertion_msg**: error message if the test fails;
         - **msg**: additional message;
+        - **attempt**: attempt counting to pass the case;
         - **dialog_box**: information about dialog box;
           - **title_bar**: title bar of the dialog box;
           - **dialog_text**: text displayed in the dialog box;
           - **widget**: information about the widget;
             - **info**: widget additional information;
-            - **type**: type of the widget (e.g., radiobutton, checkbox, textinput, numericinput)
+            - **type**: type of the widget;
+          - **image**: information about image;
+            - **address**: image address;
+            - **width**: image width in percent;
+            - **border**: image border in pixels;
+            - **base64**: image in base64 code.
+
 
 Example of a **current** document:
 
 ```json
-{
+    {
       "_rev": "44867-3888ae85c19c428cc46685845953b483",
       "_id": "current",
       "progress": 100,
       "stop_time": 1695817266,
-      "timezone": [
-        "CET",
-        "CET"
-      ],
       "start_time": 1695817263,
       "status": "failed",
       "name": "hardpy-stand",
       "dut": {
         "serial_number": "92c5a4bb-ecb0-42c5-89ac-e0caca0919fd",
+        "part_number": "part_1",
         "info": {
           "batch": "test_batch",
           "board_rev": "rev_1"
         }
       },
       "test_stand": {
-        "name": "Test stand 1"
+        "hw_id": "840982098ca2459a7b22cc608eff65d4",
+        "name": "test_stand_1",
+        "info": {
+          "geo": "Belgrade"
+        },
+        "timezone": "Europe/Belgrade",
+        "drivers": {
+          "driver_1": "driver info",
+          "driver_2": {
+            "state": "active",
+            "port": 8000
+          }
+        },
+        "location": "Belgrade_1"
       },
-      "drivers": {
-        "driver_1": "driver info",
-        "driver_2": {
-          "state": "active",
-          "port": 8000,
-        }
+      "operator_msg": {
+        "msg": "Operator message",
+        "title": "Message",
+        "visible": "True"
       },
       "modules": {
         "test_1_a": {
@@ -269,20 +309,26 @@ Example of a **current** document:
           "cases": {
             "test_dut_info": {
               "status": "passed",
-              "name": "Obtaining information about DUT",
+              "name": "DUT info ",
               "start_time": 1695817263,
               "stop_time": 1695817264,
               "assertion_msg": null,
               "msg": null,
+              "attempt": 1,
               "dialog_box": {
-                "title_bar": "Dialog box title",
-                "dialog_text": "Dialog box text",
+                "title_bar": "Example of text input",
+                "dialog_text": "Type some text and press the Confirm button",
                 "widget": {
                   "info": {
-                    "text": "Text"
+                    "text": "some text"
                   },
-                  "type": "checkbox"
-                }
+                  "type": "textinput"
+                },
+                "image": {
+                  "address": "assets/test.png",
+                  "width": 100,
+                  "border": 0,
+                }               
               }
             },
             "test_minute_parity": {
@@ -291,42 +337,54 @@ Example of a **current** document:
               "start_time": 1695817264,
               "stop_time": 1695817264,
               "assertion_msg": "The test failed because minute 21 is odd! Try again!",
+              "attempt": 1,
               "msg": [
                 "Current minute 21"
-              ],
-              "dialog_box": {}
-            },
+              ]
+            }
           }
-        },
+        }
       }
     }
 ```
 
 ### Runstore scheme
 
+<h1 align="center">
+    <img src="https://raw.githubusercontent.com/everypinio/hardpy/main/docs/img/database/runstore.png" alt="runstore_scheme">
+</h1>
+
 The **runstore** database is similar to **statestore** database, but there are differences:
+
 - **runstore** contains the **artifact** field for test run, module, and case;
-- **runstore** does not contain **dialog_box** filed.
+- **runstore** does not contain **dialog_box** and **attempt** fields.
 
 The **current** document of **runstore** database contains the following fields:
 
 - **_rev**: current document revision;
 - **_id**: unique document identifier;
-- **progress**: test progress;
 - **stop_time**: end time of testing in Unix seconds;
-- **timezone**: timezone as a list of strings;
 - **start_time**: testing start time in Unix seconds;
 - **status**: test execution status;
 - **name**: test suite name;
 - **dut**: DUT information containing the serial number and additional information;
 - **test_stand**: information about the test stand in the form of a dictionary;
-- **drivers**: information about drivers in the form of a dictionary;
 - **artifact**: an object containing information about artifacts created during the test run;
 - **modules**: module information.
+
+The **test_stand** block containt the following fields:
+
+  - **name** - test stand name;
+  - **drivers**: information about drivers in the form of a dictionary;
+  - **info**: a dictionary containing additional information about the test stand;
+  - **timezone**: timezone as a string;
+  - **location**: test stand location;
+  - **hw_id**: test stand machine id (GUID) or MAC address.
 
 The **dut** block contains the following fields:
 
   - **serial_number**: DUT serial number;
+  - **part_number**: DUT part number;
   - **info**: A dictionary containing additional information about the DUT, such as batch, board revision, etc.
 
 The **modules** block contains the following fields:
@@ -350,42 +408,38 @@ The **modules** block contains the following fields:
 Example of a **current** document:
 
 ```json
-{
+    {
       "_rev": "44867-3888ae85c19c428cc46685845953b483",
       "_id": "current",
-      "progress": 100,
       "stop_time": 1695817266,
-      "timezone": [
-        "CET",
-        "CET"
-      ],
       "start_time": 1695817263,
       "status": "failed",
       "name": "hardpy-stand",
       "dut": {
         "serial_number": "92c5a4bb-ecb0-42c5-89ac-e0caca0919fd",
+        "part_number": "part_1",
         "info": {
           "batch": "test_batch",
           "board_rev": "rev_1"
         }
       },
       "test_stand": {
-        "name": "Test stand 1"
+        "hw_id": "840982098ca2459a7b22cc608eff65d4",
+        "name": "test_stand_1",
+        "info": {
+          "geo": "Belgrade"
+        },
+        "timezone": "Europe/Belgrade",
+        "drivers": {
+          "driver_1": "driver info",
+          "driver_2": {
+            "state": "active",
+            "port": 8000
+          }
+        },
+        "location": "Belgrade_1"
       },
-      "drivers": {
-        "driver_1": "driver info",
-        "driver_2": {
-          "state": "active",
-          "port": 8000
-        }
-      },
-      "artifact": {
-        "data_str": "456DATA",
-        "data_int": 12345,
-        "data_dict": {
-          "test_key": "456DATA"
-        }
-      },
+      "artifact": {},
       "modules": {
         "test_1_a": {
           "status": "failed",
@@ -396,12 +450,12 @@ Example of a **current** document:
           "cases": {
             "test_dut_info": {
               "status": "passed",
-              "name": "Obtaining information about DUT",
+              "name": "DUT info",
               "start_time": 1695817263,
               "stop_time": 1695817264,
               "assertion_msg": null,
               "msg": null,
-              "artifact": {"data_str": "456DATA"}
+              "artifact": {}
             },
             "test_minute_parity": {
               "status": "failed",
@@ -419,9 +473,9 @@ Example of a **current** document:
                   "test_key": "456DATA"
                 }
               }
-            },
+            }
           }
-        },
+        }
       }
     }
 ```

@@ -1,0 +1,6 @@
+*
+!.gitignore
+!launch.json
+!settings.default.json
+!extensions.json
+!cspell.json

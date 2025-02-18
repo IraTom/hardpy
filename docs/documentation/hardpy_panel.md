@@ -21,30 +21,79 @@ The **hardpy panel** or operator panel is a web interface that displays and cont
 
 ## Usage
 
-You can launch **hardpy panel** by using the command `hardpy-panel [...]`, where `[...]` is a tests directory.
+### Launch operator panel
+
+Use the [hardpy run](./cli.md#hardpy-run) command to start the web server.
 After this open page http://localhost:8000/ in the browser.
 
 When the operator panel is running, you can run tests through the web interface or through
 the pytest launcher (in a terminal or from another application).
 
+### Start and stop tests
+
+The operator panel contains a test start/stop button in the lower right corner of the screen.
+The user can start/stop tests using the space key.
+
+### Settings
+
+The operator panel contains a setting button in the top right corner.
+
+#### debug mode
+
+The user can view the **statestore** database online by clicking on 
+the **Turn on the debug mode** button.
+
+Debug mode is disabled by default.
+
+#### sound
+
+The user can turn on the sound of the end of the test by clicking on 
+the **Turn on the sound** button.
+
+Sound is disabled by default.
+
 ### Dialog box
 
 For user interaction with the test, it is possible to use dialog boxes.
-An example of usage can be seen in the example [dialog box](../examples/dialog_box.md).
+An example of usage can be seen in the example [dialog box](../examples/dialog_box.md) and in [dialog box documentation](pytest_hardpy.md#run_dialog_box).
 Currently, there are some types of dialog boxes.
+
+Each dialog box can contain an image.
+
+* Allows the width to be changed using the `width` parameter.
+* Allows changing the border thickness with the `border` parameter.
+* Allow the following image types: gif, jpeg, pjpeg, png, svg+xml, tiff, vnd.microsoft.icon, vnd.wap.wbmp, webp.
 
 #### basic dialog box
 
 Contains an instruction or question and a `confirm` button for confirmation.
 
-![base_dialog_box](../img/dialog_box/base_dialog_box.png)
+=== "Widget without image"
+    <h1 align="center">
+        <img src="https://raw.githubusercontent.com/everypinio/hardpy/main/docs/img/dialog_box/base_dialog_box.png" alt="base_dialog_box">
+    </h1>
+
+=== "Widget with image"
+    <h1 align="center">
+        <img src="https://raw.githubusercontent.com/everypinio/hardpy/main/docs/img/dialog_box/base_dbx_with_image.png" alt="base_dialog_box_with_image">
+    </h1>
+
 
 #### text input field
 
 Contains an instruction or question, a text input field, and a `confirm` button for confirmation.
 The text is transmitted in UTF-8 encoding.
 
-![text_input_dialog_box](../img/dialog_box/text_input_dialog_box.png)
+=== "Widget without image"
+    <h1 align="center">
+        <img src="https://raw.githubusercontent.com/everypinio/hardpy/main/docs/img/dialog_box/text_input_dialog_box.png" alt="text_input_dialog_box">
+    </h1>
+
+=== "Widget with image"
+    <h1 align="center">
+        <img src="https://raw.githubusercontent.com/everypinio/hardpy/main/docs/img/dialog_box/dbx_with_text_input_and_image.png" alt="text_input_dialog_box_with_image">
+    </h1>
+
 
 #### number input field
 
@@ -55,7 +104,16 @@ Contains an instruction or question, a number input field, and a `confirm` butto
 * Allows numbers to be entered using **E notation** with `e`, e.g. `2e3`.
 * The entered numbers will be converted to float.
 
-![num_input_dialog_box](../img/dialog_box/num_input_dialog_box.png)
+=== "Widget without image"
+    <h1 align="center">
+        <img src="https://raw.githubusercontent.com/everypinio/hardpy/main/docs/img/dialog_box/num_input_dialog_box.png" alt="num_input_dialog_box">
+    </h1>
+
+=== "Widget with image"
+    <h1 align="center">
+        <img src="https://raw.githubusercontent.com/everypinio/hardpy/main/docs/img/dialog_box/dbx_with_num_input_and_image.png" alt="num_input_dialog_box_with_image">
+    </h1>
+
 
 #### radiobutton
 
@@ -64,105 +122,79 @@ Contains radiobutton widget.
 * The user selects one option from several possible ones.
 * Returns the contents of the selected item as a string.
 
-![radiobutton_dialog_box](../img/dialog_box/radiobutton_dialog_box.png)
+
+=== "Widget without image"
+    <h1 align="center">
+        <img src="https://raw.githubusercontent.com/everypinio/hardpy/main/docs/img/dialog_box/radiobutton_dialog_box.png" alt="radiobutton_dialog_box">
+    </h1>
+
+=== "Widget with image"
+    <h1 align="center">
+        <img src="https://raw.githubusercontent.com/everypinio/hardpy/main/docs/img/dialog_box/dbx_with_radio_and_image.png" alt="radiobutton_dialog_box_with_image">
+    </h1>
 
 #### checkbox
 
 Contains checkbox widget.
 
 * The user selects several options from several possible ones.
-* Returns a list with the contents of the selected items converted to a string.
+* Returns a list with the contents of the selected items.
 
-![checkbox_dialog_box](../img/dialog_box/checkbox_dialog_box.png)
+
+=== "Widget without image"
+    <h1 align="center">
+        <img src="https://raw.githubusercontent.com/everypinio/hardpy/main/docs/img/dialog_box/checkbox_dialog_box.png" alt="checkbox_dialog_box">
+    </h1>
+
+=== "Widget with image"
+    <h1 align="center">
+        <img src="https://raw.githubusercontent.com/everypinio/hardpy/main/docs/img/dialog_box/dbx_with_checkbox_and_image.png" alt="checkbox_dialog_box_with_image">
+    </h1>
+
+
+#### multiple steps
+
+Contains an instruction with multiple steps and `confirm` button for confirmation.
+Allows steps with text and image.
+
+=== "Step 1"
+    <h1 align="center">
+        <img src="https://raw.githubusercontent.com/everypinio/hardpy/main/docs/img/dialog_box/dialog_box_with_steps.png" alt="dialog_box_with_steps">
+    </h1>
+
+=== "Step 2"
+    <h1 align="center">
+        <img src="https://raw.githubusercontent.com/everypinio/hardpy/main/docs/img/dialog_box/dbx_with_multistep_and_image.png" alt="dialog_box_with_step_with_image_and_text">
+    </h1>
+
+=== "Step 3"
+    <h1 align="center">
+        <img src="https://raw.githubusercontent.com/everypinio/hardpy/main/docs/img/dialog_box/dialog_box_with_step_with_image.png" alt="dialog_box_with_step_with_image">
+    </h1>
+
 
 #### warning window
 
 If the user clicks `confirm` without entering anything, a warning window will be displayed.
 
-![alert](../img/dialog_box/alert.png)
+<h1 align="center">
+    <img src="https://raw.githubusercontent.com/everypinio/hardpy/main/docs/img/dialog_box/dialog_box_alert.png" alt="alert">
+</h1>
 
 #### error notification
 
 If the user closes the dialog box (using the cross in the upper right corner),
 the tests will be stopped, an error message will be displayed.
 
-![notification](../img/dialog_box/notification.png)
+<h1 align="center">
+    <img src="https://raw.githubusercontent.com/everypinio/hardpy/main/docs/img/dialog_box/dialog_box_notification.png" alt="notification">
+</h1>
 
-### Options
+### Operator message
 
-The operator panel has some options.
-To view all options run `hardpy-panel -h`.
-
-#### db_user
-
-**Statestore** and **runstore** databases
-
-The CouchDB instance user name for the **statestore** and **runstore** databases.
-The default is *dev*.
-
-```bash
--dbu DB_USER, --db_user DB_USER
-```
-
-#### db_pswd
-
-The CouchDB instance password for the **statestore** and **runstore** databases.
-The default is *dev*.
-
-```bash
--dbpw DB_PSWD, --db_pswd DB_PSWD
-```
-
-#### db_port
-
-The CouchDB instance port number for the **statestore** and **runstore** databases.
-The default is *5984*.
-
-```bash
--dbp DB_PORT, --db_port DB_PORT
-```
-
-#### db_host
-
-The CouchDB instance hostname for the **statestore** and **runstore** databases.
-The default is *localhost*.
-
-```bash
--dbh DB_HOST, --db_host DB_HOST
-```
-
-#### web_host
-
-The web interface hostname.
-The default is *localhost*.
-
-```bash
--wh WEB_HOST, --web_host WEB_HOST
-```
-
-#### web_port
-
-The web interface port number.
-The default is *8000*.
-
-```bash
--wp WEB_PORT, --web_port WEB_PORT
-```
-
-#### sck_port
-
-Internal socket port for passing backend data (such as a dialog box) to running pytest tests.
-The default is *6525*.
-
-```bash
--sp SCK_PORT, --sck_port SCK_PORT
-```
-
-#### sck_addr
-
-Internal socket address for passing backend data (such as a dialog box) to running pytest tests.
-The default is *localhost*.
-
-```bash
--sa SCK_ADDR, --sck_addr SCK_ADDR
-```
+The messages to the operator are similar to [dialog boxes](#dialog-box), 
+but do not contain a **Confirm** button and should be called outside 
+the execution of the test plan, for example in case of exception 
+catching in the `conftest.py` file. 
+For more information, see the example [operator message](./../examples/operator_msg.md)
+or in the function description [set_operator_message](./pytest_hardpy.md#set_operator_message).

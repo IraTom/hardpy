@@ -22,7 +22,7 @@ Another way to enable a plugin without `pytest.ini` file is to run tests with th
 pytest --hardpy-pt tests
 ```
 
-If tests are run via [hardpy-panel](hardpy_panel.md), then the pytest-hardpy plugin will be enabled for tests by default.
+If tests are run via [hardpy panel](hardpy_panel.md), then the pytest-hardpy plugin will be enabled for tests by default.
 
 ## Functions
 
@@ -44,7 +44,7 @@ def test_dut_info():
 #### set_dut_serial_number
 
 Writes a string with a serial number.
-When called again, the Exception DuplicateSerialNumberError will be caused.
+When called again, the exception `DuplicateSerialNumberError` will be caused.
 
 **Arguments:**
 
@@ -57,6 +57,38 @@ def test_serial_number():
     set_dut_serial_number("1234")
 ```
 
+#### set_dut_part_number
+
+Writes a string with a part number.
+When called again, the exception `DuplicatePartNumberError` will be caused.
+
+**Arguments:**
+
+- `part_number` *(str)*: DUT part number
+
+**Example:**
+
+```python
+def test_part_number():
+    set_dut_part_number("part_1")
+```
+
+#### set_stand_name
+
+Writes a string with a test stand name.
+When called again, the exception `DuplicateTestStandNameError` will be caused.
+
+**Arguments:**
+
+- `location` *(str)*: test stand location
+
+**Example:**
+
+```python
+def test_stand_name():
+    set_stand_name("name 1")
+```
+
 #### set_stand_info
 
 Writes a dictionary with information about the test stand.
@@ -66,15 +98,47 @@ When called again, the information will be added to DB.
 
 - `info` *(dict)*: test stand info
 
-**Raises**
+**Example:**
 
-- `DuplicateSerialNumberError`: if serial number is already set
+```python
+def test_stand_info():
+    set_stand_info({"geo": "Belgrade"})
+```
+
+#### set_stand_location
+
+Writes a string with a test stand location.
+When called again, the exception `DuplicateTestStandLocationError` will be caused.
 
 **Example:**
 
 ```python
 def test_stand_info():
-    set_stand_info({"name": "Test stand 1"})
+    set_stand_location("Moon")
+```
+
+#### set_driver_info
+
+The function records a dictionary containing information about the test stand driver.
+The data is updated with new information each time the function is called.
+
+Driver data is stored in both **statestore** and **runstore** databases.
+
+**Arguments:**
+
+- `drivers` *(dict)*: A dictionary of drivers, where keys are driver names and values are driver-specific data.
+
+**Example:**
+
+```python
+def test_driver_info():
+    drivers = {
+        "driver_1": {
+            "name": "Driver A",
+            "type": "network"
+        }
+    }
+    set_driver_info(drivers)
 ```
 
 #### set_case_artifact
@@ -134,34 +198,11 @@ def test_run_artifact():
     set_run_artifact({"data_str": "789DATA"})
 ```
 
-#### set_driver_info
-
-The function records a dictionary containing information about the driver.
-The data is updated with new information each time the function is called.
-
-Driver data is stored in both **statestore** and **runstore** databases.
-
-**Arguments:**
-
-- `drivers` *(dict)*: A dictionary of drivers, where keys are driver names and values are driver-specific data.
-
-**Example:**
-
-```python
-def test_driver_info():
-    drivers = {
-        "driver_1": {
-            "name": "Driver A",
-            "type": "network"
-        }
-    }
-    set_driver_info(drivers)
-```
-
 #### set_message
 
 Writes a string with a message.
-If a message is sent without a key, the key will be generated automatically and the messages will be appended.
+If a message is sent without a key, the key will be generated
+automatically and the messages will be appended.
 If the message is sent with a known key, it will be updated.
 
 **Arguments:**
@@ -178,10 +219,30 @@ def test_message():
     set_message("Update message 2", "msg_upd")
 ```
 
+#### set_operator_message
+
+Sets an operator message in the **statestore** database and updates the database.
+The function should be used to handle events outside of testing.
+For messages to the operator during testing,
+there is the function [run_dialog_box](#run_dialog_box).
+
+**Arguments:**
+
+- `msg` *(str)*: The message to be displayed.
+- `title` *(str | None)*: The optional title for the message.
+
+**Example:**
+
+```python
+from hardpy import set_operator_message
+
+def test_set_operator_msg():
+    set_operator_message(msg="This is a sample operator message.", title="Important Notice")
+```
+
 #### run_dialog_box
 
-Displays a dialog box and updates the 'dialog_box' field in the **statestore** database.
-Only one dialog box can be invoked per test case.
+Displays a dialog box and updates the `dialog_box` field in the **statestore** database.
 
 **Arguments:**
 
@@ -189,10 +250,26 @@ Only one dialog box can be invoked per test case.
 
 DialogBox attributes:
 
-- dialog_text (str): The text of the dialog box.
-- title_bar (str | None): The title bar of the dialog box. 
+- `dialog_text` *(str)*: The text of the dialog box.
+- `title_bar` *(str | None)*: The title bar of the dialog box.
 If the title_bar field is missing, it is the case name.
-- widget (DialogBoxWidget | None): Widget information.
+- `widget` *(IWidget | None)*: Widget information.
+- `image` *(ImageComponent | None)*: Image information.
+
+ImageComponent attributes:
+
+- `address` *(str)*: Image address.
+- `width` *(int | None)*: Image width in %.
+- `border` *(int | None)*: Image border width.
+
+Widget list:
+
+- Base, only dialog text;
+- Text input, `TextInputWidget`;
+- Numeric input, `NumericInputWidget`;
+- Radiobutton, `RadiobuttonWidget`;
+- Checkbox, `CheckboxWidget`;
+- Multistep, `MultistepWidget`.
 
 **Returns:**
 
@@ -200,31 +277,31 @@ If the title_bar field is missing, it is the case name.
 
 The type of the return value depends on the widget type:
 
-- Without widget: None.
+- Without widget (BASE): bool.
 - NUMERIC_INPUT: float.
 - TEXT_INPUT: str.
 - RADIOBUTTON: str.
 - CHECKBOX: List(str).
+- MULTISTEP: bool.
 
 **Raises**
 
-- `ValueError`: If the 'message' argument is empty.
-- `DuplicateDialogBoxError`: If the dialog box is already caused.
+- `ValueError`: If the `message` argument is empty.
 
 **Example:**
 
 ```python
 from hardpy import dialog_box
-def test_dialog_box():
-    dbx = dialog_box.DialogBox(
-            title_bar="Dialog box title",
-            dialog_text="Dialog box text",
-            widget=dialog_box.DialogBoxWidget(
-                type=dialog_box.DialogBoxWidgetType.TEXT_INPUT
-            ),
-        )
-    response = hardpy.run_dialog_box(dbx)
-    assert response == "ok"
+def test_text_input():
+    dbx = DialogBox(
+        dialog_text="Type 'ok' and press the Confirm button",
+        title_bar="Example of text input",
+        widget=TextInputWidget(),
+        image=ImageComponent(address="assets/test.png", width=50),
+    )
+    response = run_dialog_box(dbx)
+    set_message(f"Entered text {response}")
+    assert response == "ok", "The entered text is not correct"
 ```
 
 #### get_current_report
@@ -242,11 +319,41 @@ def test_current_report():
     report = get_current_report()
 ```
 
+#### get_current_attempt
+
+Returns the num of current attempt.
+
+**Returns:**
+
+- *(int)*: num of current attempt
+
+**Example:**
+
+```python
+@pytest.mark.attempt(5)
+def test_attempt_message():
+    attempt = hardpy.get_current_attempt()
+    hardpy.set_message(f"Current attempt {attempt}")
+    if attempt < 5:
+        assert False
+```
+
 ## Class
 
 #### CouchdbLoader
 
 Used to write reports to the database **CouchDB**.
+
+Report names (revision id) are automatically generated based on the test
+completion date and the device serial number.
+If the serial number dut is empty, a random identifier with
+prefix `no_serial` is used.
+The random identifier is a unique string generated using the `uuid4()`
+function from the `uuid` module in Python.
+This allows for easy identification and sorting of reports.
+
+* Valid report name: `report_1726496218_1234567890`
+* Valid report name (no serial number): `report_1726496218_no_serial_808007`
 
 **Example:**
 
@@ -303,7 +410,7 @@ Sets a text name for the test case (default: function name)
 ```python
 @pytest.mark.case_name("Simple case 1")
 def test_one():
-    assert 42 == 42
+    assert True
 ```
 
 #### module_name
@@ -319,6 +426,7 @@ pytestmark = pytest.mark.module_name("Module 1")
 #### dependency
 
 Skips the test case/module if the main test fails/skipped/errored.
+For more information, see the example [skip test](./../examples/skip_test.md)
 
 **Example:**
 
@@ -332,11 +440,26 @@ def test_two():
     assert True
 ```
 
+#### attempt
+
+If a test is marked `attempt`, it will be repeated if it fails the number of
+attempts specified by the mark.
+The test will be repeated until it is passed.
+For more information, see the example [attempts](./../examples/attempts.md)
+
+**Example:**
+
+```python
+@pytest.mark.attempt(5)
+def test_attempts():
+    assert False
+```
+
 ## Options
 
 **pytest-hardpy** has several options to run:
 
-#### hardpy_pt
+#### hardpy-pt
 
 Option to enable the **pytest-hardpy** plugin.
 
@@ -344,56 +467,37 @@ Option to enable the **pytest-hardpy** plugin.
 --hardpy-pt
 ```
 
-#### db_user
+#### hardpy-db-url
 
-The CouchDB instance user name for the **statestore** and **runstore** databases.
-The default is *dev*.
-
-```bash
---hardpy-dbu DB_USER
-```
-
-#### db_pswd
-
-The CouchDB instance password for the **statestore** and **runstore** databases.
-The default is *dev*.
+The CouchDB instance url for the **statestore** and **runstore** databases.
+The default is `http://dev:dev@localhost:5984/`.
 
 ```bash
---hardpy-dbpw DB_PSWD
+--hardpy-db-url
 ```
 
-#### db_port
-
-The CouchDB instance port number for the **statestore** and **runstore** databases.
-The default is *5984*.
-
-```bash
---hardpy-dbp DB_PORT
-```
-
-#### db_host
-
-The CouchDB instance hostname for the **statestore** and **runstore** databases.
-The default is *localhost*.
-
-```bash
---hardpy-dbh DB_HOST
-```
-
-#### socket_port
+#### hardpy-sp
 
 Internal socket port for passing backend data (such as a dialog box) to running pytest tests.
 The default is *6525*.
 
 ```bash
---hardpy-sp SOCKET_PORT
+--hardpy-sp
 ```
 
-#### socket_addr
+#### hardpy-sh
 
-Internal socket address for passing backend data (such as a dialog box) to running pytest tests.
+Internal socket host for passing backend data (such as a dialog box) to running pytest tests.
 The default is *localhost*.
 
 ```bash
---hardpy-sa SOCKET_ADDR
+--hardpy-sh
+```
+
+#### hardpy-clear-database
+
+Option to clean **statestore** and **runstore** databases before running pytest.
+
+```bash
+--hardpy-clear-database
 ```

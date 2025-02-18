@@ -14,9 +14,16 @@ theme:
   logo: img/logo192.png
   favicon: img/logo192.png
   palette:
-    scheme: default
-    primary: indigo
-    accent: indigo
+    - scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+
+    # Palette toggle for dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
   features:
     - announce.dismiss
     - content.action.edit
@@ -46,20 +53,25 @@ nav:
   - HardPy: index.md
   - Features: features/features.md
   - Documentation:
-    - Structure: documentation/structure.md
-    - Database: documentation/database.md
-    - Pytest-hardpy: documentation/pytest_hardpy.md
-    - HardPy panel: documentation/hardpy_panel.md
+      - documentation/index.md
+      - CLI: documentation/cli.md
+      - Configuration: documentation/hardpy_config.md
+      - Database: documentation/database.md
+      - Pytest-hardpy: documentation/pytest_hardpy.md
+      - HardPy panel: documentation/hardpy_panel.md
   - Examples:
-    - Hello HardPy: examples/hello_hardpy.md
-    - CouchDB load: examples/couchdb_load.md
-    - Minute parity: examples/minute_parity.md
-    - Dialog box: examples/dialog_box.md
-    - Multiple stands: examples/multiple_stands.md
-    - Skip test: examples/skip_test.md
-    - CouchDB in RAM: examples/db_in_ram.md
+      - examples/index.md
+      - Hello HardPy: examples/hello_hardpy.md
+      - CouchDB load: examples/couchdb_load.md
+      - Minute parity: examples/minute_parity.md
+      - Dialog box: examples/dialog_box.md
+      - Multiple stands: examples/multiple_stands.md
+      - Skip test: examples/skip_test.md
+      - CouchDB in RAM: examples/db_in_ram.md
+      - Operator message: examples/operator_msg.md
+      - Attempts: examples/attempts.md
   - About:
-    - Development: about/development.md
+      - Development: about/development.md
   - Changelog: changelog.md
 
 markdown_extensions:
@@ -76,17 +88,19 @@ markdown_extensions:
   - footnotes
   - tables
   - md_in_html
+  - pymdownx.tabbed:
+      alternate_style: true
   - toc:
       permalink: true
       title: Contents
       baselevel: 1
 
-
       # Fixes unicode chars in heading anchors. Refs:
       # https://github.com/mkdocs/mkdocs/issues/212#issuecomment-286035214
       # https://facelessuser.github.io/pymdown-extensions/extras/slugs/
       # https://facelessuser.github.io/pymdown-extensions/faq/#function-references-in-yaml
-      slugify: !!python/object/apply:pymdownx.slugs.slugify {kwds: {case: lower}}
+      slugify:
+        !!python/object/apply:pymdownx.slugs.slugify { kwds: { case: lower } }
 
 plugins:
   - search

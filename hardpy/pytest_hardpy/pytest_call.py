@@ -1,33 +1,35 @@
 # Copyright (c) 2024 Everypin
 # GNU General Public License v3.0 (see LICENSE or https://www.gnu.org/licenses/gpl-3.0.txt)
+from __future__ import annotations
 
 import socket
-from os import environ
 from dataclasses import dataclass
-from typing import Optional, Any
+from os import environ
+from time import sleep
+from typing import Any
 from uuid import uuid4
 
 from pycouchdb.exceptions import NotFound
 from pydantic import ValidationError
 
 from hardpy.pytest_hardpy.db import (
-    DatabaseField as DF,
+    DatabaseField as DF,  # noqa: N817
     ResultRunStore,
     RunStore,
 )
-from hardpy.pytest_hardpy.utils import (
-    DuplicateSerialNumberError,
-    DuplicateDialogBoxError,
-    DialogBox,
-    ConfigData,
-    generate_dialog_box_dict,
-    get_dialog_box_data,
-)
 from hardpy.pytest_hardpy.reporter import RunnerReporter
+from hardpy.pytest_hardpy.utils import (
+    ConnectionData,
+    DialogBox,
+    DuplicatePartNumberError,
+    DuplicateSerialNumberError,
+    DuplicateTestStandLocationError,
+    DuplicateTestStandNameError,
+)
 
 
 @dataclass
-class CurrentTestInfo(object):
+class CurrentTestInfo:
     """Current test info."""
 
     module_id: str
@@ -42,7 +44,7 @@ def get_current_report() -> ResultRunStore | None:
     """
     runstore = RunStore()
     try:
-        return runstore.get_document()
+        return runstore.get_document()  # type: ignore
     except NotFound:
         return None
     except ValidationError:
@@ -51,7 +53,7 @@ def get_current_report() -> ResultRunStore | None:
         return None
 
 
-def set_dut_info(info: dict):
+def set_dut_info(info: dict) -> None:
     """Add DUT info to document.
 
     Args:
@@ -64,7 +66,7 @@ def set_dut_info(info: dict):
     reporter.update_db_by_doc()
 
 
-def set_dut_serial_number(serial_number: str):
+def set_dut_serial_number(serial_number: str) -> None:
     """Add DUT serial number to document.
 
     Args:
@@ -77,11 +79,48 @@ def set_dut_serial_number(serial_number: str):
     key = reporter.generate_key(DF.DUT, DF.SERIAL_NUMBER)
     if reporter.get_field(key):
         raise DuplicateSerialNumberError
-    reporter.set_doc_value(key, serial_number)
+    reporter.set_doc_value(
+        key,
+        serial_number if isinstance(serial_number, str) else str(serial_number),
+    )
     reporter.update_db_by_doc()
 
 
-def set_stand_info(info: dict):
+def set_dut_part_number(part_number: str) -> None:
+    """Add DUT part number to document.
+
+    Args:
+        part_number (str): DUT part number
+
+    Raises:
+        DuplicatePartNumberError: if part number is already set
+    """
+    reporter = RunnerReporter()
+    key = reporter.generate_key(DF.DUT, DF.PART_NUMBER)
+    if reporter.get_field(key):
+        raise DuplicatePartNumberError
+    reporter.set_doc_value(key, part_number)
+    reporter.update_db_by_doc()
+
+
+def set_stand_name(name: str) -> None:
+    """Add test stand name to document.
+
+    Args:
+        name (str): test stand name
+
+    Raises:
+        DuplicateTestStandNameError: if test stand name is already set
+    """
+    reporter = RunnerReporter()
+    key = reporter.generate_key(DF.TEST_STAND, DF.NAME)
+    if reporter.get_field(key):
+        raise DuplicateTestStandNameError
+    reporter.set_doc_value(key, name)
+    reporter.update_db_by_doc()
+
+
+def set_stand_info(info: dict) -> None:
     """Add test stand info to document.
 
     Args:
@@ -89,12 +128,26 @@ def set_stand_info(info: dict):
     """
     reporter = RunnerReporter()
     for stand_key, stand_value in info.items():
-        key = reporter.generate_key(DF.TEST_STAND, stand_key)
+        key = reporter.generate_key(DF.TEST_STAND, DF.INFO, stand_key)
         reporter.set_doc_value(key, stand_value)
     reporter.update_db_by_doc()
 
 
-def set_message(msg: str, msg_key: Optional[str] = None) -> None:
+def set_stand_location(location: str) -> None:
+    """Add test stand location to document.
+
+    Args:
+        location (str): test stand location
+    """
+    reporter = RunnerReporter()
+    key = reporter.generate_key(DF.TEST_STAND, DF.LOCATION)
+    if reporter.get_field(key):
+        raise DuplicateTestStandLocationError
+    reporter.set_doc_value(key, location)
+    reporter.update_db_by_doc()
+
+
+def set_message(msg: str, msg_key: str | None = None) -> None:
     """Add or update message in current test.
 
     Args:
@@ -126,7 +179,7 @@ def set_message(msg: str, msg_key: Optional[str] = None) -> None:
     reporter.update_db_by_doc()
 
 
-def set_case_artifact(data: dict):
+def set_case_artifact(data: dict) -> None:
     """Add data to current test case.
 
     Artifact saves only in RunStore database
@@ -150,7 +203,7 @@ def set_case_artifact(data: dict):
     reporter.update_db_by_doc()
 
 
-def set_module_artifact(data: dict):
+def set_module_artifact(data: dict) -> None:
     """Add data to current test module.
 
     Artifact saves only in RunStore database
@@ -172,7 +225,7 @@ def set_module_artifact(data: dict):
     reporter.update_db_by_doc()
 
 
-def set_run_artifact(data: dict):
+def set_run_artifact(data: dict) -> None:
     """Add data to current test run.
 
     Artifact saves only in RunStore database
@@ -192,7 +245,7 @@ def set_run_artifact(data: dict):
 
 
 def set_driver_info(drivers: dict) -> None:
-    """Add or update drivers data.
+    """Add or update test stand drivers data.
 
     Driver data is stored in both StateStore and RunStore databases.
 
@@ -204,6 +257,7 @@ def set_driver_info(drivers: dict) -> None:
 
     for driver_name, driver_data in drivers.items():
         key = reporter.generate_key(
+            DF.TEST_STAND,
             DF.DRIVERS,
             driver_name,
         )
@@ -211,7 +265,7 @@ def set_driver_info(drivers: dict) -> None:
     reporter.update_db_by_doc()
 
 
-def run_dialog_box(dialog_box_data: DialogBox) -> Any:
+def run_dialog_box(dialog_box_data: DialogBox) -> Any:  # noqa: ANN401
     """Display a dialog box.
 
     Args:
@@ -221,27 +275,28 @@ def run_dialog_box(dialog_box_data: DialogBox) -> Any:
 
         - dialog_text (str): The text of the dialog box.
         - title_bar (str | None): The title bar of the dialog box.
-        If the title_bar field is missing, it is the case name.
+          If the title_bar field is missing, it is the case name.
         - widget (DialogBoxWidget | None): Widget information.
+        - image (ImageComponent | None): Image information.
 
     Returns:
         Any: An object containing the user's response.
 
         The type of the return value depends on the widget type:
 
-        - Without widget: None.
+        - BASE: bool.
         - TEXT_INPUT: str.
         - NUMERIC_INPUT: float.
         - RADIOBUTTON: str.
         - CHECKBOX: list[str].
+        - MULTISTEP: bool.
 
     Raises:
         ValueError: If the 'message' argument is empty.
-        DuplicateDialogBoxError: If the dialog box is already caused.
     """
     if not dialog_box_data.dialog_text:
-        raise ValueError("The 'dialog_text' argument cannot be empty.")
-
+        msg = "The 'dialog_text' argument cannot be empty."
+        raise ValueError(msg)
     current_test = _get_current_test()
     reporter = RunnerReporter()
     key = reporter.generate_key(
@@ -251,24 +306,71 @@ def run_dialog_box(dialog_box_data: DialogBox) -> Any:
         current_test.case_id,
         DF.DIALOG_BOX,
     )
-    if reporter.get_field(key):
-        raise DuplicateDialogBoxError
 
-    data_dict = generate_dialog_box_dict(dialog_box_data)
+    reporter.set_doc_value(key, {}, statestore_only=True)
+    reporter.update_db_by_doc()
+    debounce_time = 0.2
+    sleep(debounce_time)
 
-    reporter.set_doc_value(key, data_dict, statestore_only=True)
+    reporter.set_doc_value(key, dialog_box_data.to_dict(), statestore_only=True)
     reporter.update_db_by_doc()
 
-    dialog_raw_data = _get_socket_raw_data()
+    input_dbx_data = _get_socket_raw_data()
 
-    return get_dialog_box_data(dialog_raw_data, dialog_box_data.widget)
+    # cleanup widget
+    reporter.set_doc_value(key, {}, statestore_only=True)
+    reporter.update_db_by_doc()
+    return dialog_box_data.widget.convert_data(input_dbx_data)
+
+
+def set_operator_message(msg: str, title: str | None = None) -> None:
+    """Set operator message.
+
+    The function should be used to handle events outside of testing.
+    For messages to the operator during testing, there is the function `run_dialog_box`.
+
+    Args:
+        msg (str): Message
+        title (str | None): Title
+    """
+    reporter = RunnerReporter()
+    key = reporter.generate_key(DF.OPERATOR_MSG)
+
+    reporter.set_doc_value(key, {}, statestore_only=True)
+    reporter.update_db_by_doc()
+    debounce_time = 0.2
+    sleep(debounce_time)
+
+    msg_data = {"msg": msg, "title": title, "visible": True}
+    reporter.set_doc_value(key, msg_data, statestore_only=True)
+    reporter.update_db_by_doc()
+    is_msg_visible = _get_socket_raw_data()
+    msg_data["visible"] = is_msg_visible
+    reporter.set_doc_value(key, msg_data, statestore_only=True)
+    reporter.update_db_by_doc()
+
+    # cleanup widget
+    reporter.set_doc_value(key, {}, statestore_only=True)
+    reporter.update_db_by_doc()
+
+
+def get_current_attempt() -> int:
+    """Get current attempt.
+
+    Returns:
+        int: current attempt
+    """
+    reporter = RunnerReporter()
+    module_id, case_id = _get_current_test().module_id, _get_current_test().case_id
+    return reporter.get_current_attempt(module_id, case_id)
 
 
 def _get_current_test() -> CurrentTestInfo:
     current_node = environ.get("PYTEST_CURRENT_TEST")
 
     if current_node is None:
-        raise RuntimeError("PYTEST_CURRENT_TEST variable is not set")
+        msg = "PYTEST_CURRENT_TEST variable is not set"
+        raise RuntimeError(msg)
 
     module_delimiter = ".py::"
     module_id_end_index = current_node.find(module_delimiter)
@@ -291,11 +393,14 @@ def _get_socket_raw_data() -> str:
     # create socket connection
     server = socket.socket()
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    config_data = ConfigData()
+    con_data = ConnectionData()
+
     try:
-        server.bind((config_data.socket_addr, config_data.socket_port))
-    except socket.error as exc:
-        raise RuntimeError(f"Error creating socket: {exc}")
+        server.bind((con_data.socket_host, con_data.socket_port))
+    except OSError as exc:
+        msg = "Socket creating error"
+        server.close()
+        raise RuntimeError(msg) from exc
     server.listen(1)
     client, _ = server.accept()
 

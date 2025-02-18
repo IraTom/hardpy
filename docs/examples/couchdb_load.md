@@ -1,27 +1,17 @@
 # Couchdb load
 
 This is an example of storing the test result in CouchDB.
-Test reports are written to the **report** database at the end of the testing process via **CouchdbLoader**.
+Test reports are written to the **report** database at the end of 
+the testing process via **CouchdbLoader**.
+The code for this example can be seen inside the hardpy package 
+[CouchDB Load](https://github.com/everypinio/hardpy/tree/main/examples/couchdb_load).
 
 ### how to start
 
-1. Launch [CouchDH instance](../documentation/database.md#couchdb-instance).
-2. Create a directory `<dir_name>` with the files described below.
-3. Launch `hardpy-panel <dir_name>`.
-
-### pytest.ini
-
-It is a file of built-in configuration options that determine how live logging works and 
-enable **pytest-hardpy** plugin for launching via pytest.
-
-```ini
-[pytest]
-log_cli = true
-log_cli_level = INFO
-log_cli_format = %(asctime)s [%(levelname)s] %(message)s
-log_cli_date_format = %H:%M:%S
-addopts = --hardpy-pt
-```
+1. Launch `hardpy init couchdb_load`.
+2. Launch [CouchDH instance](../documentation/database.md#couchdb-instance).
+3. Modify the files described below.
+4. Launch `hardpy run couchdb_load`.
 
 ### conftest.py
 
@@ -32,7 +22,6 @@ Contains settings and fixtures for all tests:
 
 ```python
 import pytest
-
 from hardpy import (
     CouchdbLoader,
     CouchdbConfig,
@@ -51,13 +40,11 @@ def fill_actions_after_test(post_run_functions: list):
     yield
 ```
 
-### test_example_1.py
+### test_1.py
 
 Contains two simple examples of a valid test.
 
 ```python
-import pytest
-
 def test_one():
     assert True
 
@@ -65,16 +52,14 @@ def test_two():
     assert True
 ```
 
-### test_example_2.py
+### test_2.py
 
 Contains two simple examples: a valid test and an invalid test.
 
 ```python
-import pytest
-
 def test_three():
     assert True
 
 def test_four():
-    assert False
+    raise AssertionError
 ```

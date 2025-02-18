@@ -1,22 +1,19 @@
 <h1 align="center">
-    <img src="https://everypinio.github.io/hardpy/img/logo512.png" alt="HardPy" style="width:200px;">
-</h1>
-
-<h1 align="center">
-    <b>HardPy</b>
+    <img src="https://raw.githubusercontent.com/everypinio/hardpy/main/docs/img/logo256.png" alt="HardPy" style="width:150px;">
 </h1>
 
 <p align="center">
 HardPy is a python library for creating a test bench for devices.
 </p>
 
----
+<div align="center">
 
-**Documentation**: <a href=https://everypinio.github.io/hardpy/ target="_blank">https://everypinio.github.io/hardpy/</a>
+[![PyPI version](https://img.shields.io/pypi/v/hardpy)](https://pypi.org/project/hardpy/)
+![python versions](https://img.shields.io/pypi/pyversions/hardpy.svg)
+[![pytest versions](https://img.shields.io/badge/pytest-%3E%3D7.0%20%3C9.0-blue)](https://docs.pytest.org/en/latest/)
+[![Documentation](https://img.shields.io/badge/Documentation%20-Overview%20-%20%23007ec6)](https://everypinio.github.io/hardpy/)
 
-**Source Code**: <a href=https://github.com/everypinio/hardpy target="_blank">https://github.com/everypinio/hardpy</a>
-
-**PyPi**: <a href=https://pypi.org/project/hardpy/ target="_blank">https://pypi.org/project/hardpy/</a>
+</div>
 
 ---
 
@@ -28,77 +25,36 @@ HardPy allows you to:
 * Use a browser to view, start, stop, and interact with tests;
 * Store test results in the [CouchDB](https://couchdb.apache.org/) database.
 
+<h1 align="center">
+    <img src="https://raw.githubusercontent.com/everypinio/hardpy/main/docs/img/hardpy_panel.gif" alt="hardpy panel" style="width:550px;">
+</h1>
+
 ## To Install
 
 ```bash
-pip3 install hardpy
+pip install hardpy
 ```
-
-## Examples
-
-Find examples of using the **HardPy** in the `examples` folder.
 
 ## Getting Started
 
-#### CouchDB
-
-This is a simple instruction for Linux.
-For Windows, follow the instructions from the
-[documentation](https://everypinio.github.io/hardpy/documentation/database/#couchdb-instance).
-
-Launch CouchDB with Docker.
-The Docker version must be 24.0.0 or higher.
-Create `couchdb.ini` file:
-
-```ini
-[chttpd]
-enable_cors=true
-
-[cors]
-origins = *
-methods = GET, PUT, POST, HEAD, DELETE
-credentials = true
-headers = accept, authorization, content-type, origin, referer, x-csrf-token
-```
-
-Run the Docker container from folder with couchdb.ini file:
-
+1. Create your first test bench.
 ```bash
-docker run --rm --name couchdb -p 5984:5984 -e COUCHDB_USER=dev -e COUCHDB_PASSWORD=dev -v ./couchdb.ini:/opt/couchdb/etc/local.ini couchdb:3.3
+hardpy init
 ```
-
-Command for Windows:
-
+2. Launch [CouchDB](https://couchdb.apache.org/) database via [docker compose](https://docs.docker.com/compose/) in the background.
 ```bash
-docker run --rm --name couchdb -p 5984:5984 -e COUCHDB_USER=dev -e COUCHDB_PASSWORD=dev -v .\couchdb.ini:/opt/couchdb/etc/local.ini couchdb:3.3.2
+cd tests
+docker compose up -d
 ```
-
-#### Test steps
-
-Add simple test to `tests` folder
-
-```python
-# test_1.py
-import pytest
-
-def test_one():
-    assert True
+3. Launch HardPy operator panel.
+```bash
+hardpy run
 ```
-#### Operator panel
+4. View operator panel in browser: http://localhost:8000/
+5. View the latest test report: http://localhost:5984/_utils
 
-Launch `hardpy-panel` from tests folder or launch `hardpy-panel tests` and open page http://localhost:8000/ in browser.
+    Login and password: **dev**, database - **runstore**, document - **current**.
 
-<h1 align="center">
-    <img src="https://everypinio.github.io/hardpy/img/hardpy_operator_panel_hello_hardpy.png"
-    alt="hardpy operator panel" style="width:600px;">
-</h1>
+## Examples
 
-#### Test report
-
-The last test report is stored in **runstore** database, document - **current**.
-You can view the CouchDB instance through Fauxton web interface: http://localhost:5984/_utils
-
-<h1 align="center">
-    <img src="https://everypinio.github.io/hardpy/img/runstore_hello_hardpy.png"
-    alt="hardpy runstore" style="width:600px;">
-</h1>
+For more examples of using **HardPy**, see the [examples](https://github.com/everypinio/hardpy/tree/main/examples) folder and the [documentation](https://everypinio.github.io/hardpy/examples/).
