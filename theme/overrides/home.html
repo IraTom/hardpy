@@ -1,0 +1,384 @@
+{% extends "base.html" %}
+
+<!-- Render landing page under tabs -->
+{% block tabs %}
+{{ super() }}
+
+<!-- Additional styles for landing page -->
+<style>
+
+  /* Application header should be static for the landing page */
+  .md-header {
+    position: initial;
+  }
+
+  /* Remove spacing, as we cannot hide it completely */
+  .md-main__inner {
+    margin: 0;
+  }
+
+  /* Hide main content for now */
+  .md-content {
+    display: none;
+  }
+
+  /* Hide table of contents */
+  @media screen and (min-width: 60em) {
+    .md-sidebar--secondary {
+      display: none;
+    }
+  }
+
+  /* Hide navigation */
+  @media screen and (min-width: 76.25em) {
+    .md-sidebar--primary {
+      display: none;
+    }
+  }
+</style>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HardPy</title>
+  <meta name="description"
+    content="HardPY is a FREE cross-platform open source PCBA functional test bench automation system">
+  <meta property="og:url" content="http://everypin.io/hardpy">
+  <meta property="og:title" content="HardPy">
+  <meta property="og:description"
+    content="HardPY is a FREE cross-platform open source PCBA functional test bench automation system">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://static.tildacdn.com/tild3132-3165-4365-a166-333263666238/_.png">
+  <link rel="canonical" href="http://everypin.io/hardpy">
+  <link rel="stylesheet" href="overrides/style.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" as="font">
+  <link href="overrides/css2.css" rel="stylesheet">
+  <link rel="stylesheet" href="overrides/css2(1).css" type="text/css">
+</head>
+
+
+<body class="body">
+  <div class="t-container">
+    <div class="t-col t-col_8 t-prefix_2">
+
+      <div class="t-cover__wrapper .t-valign_middle">
+        <div class="align_center">
+          <div class="blocklogo"> <img class="logo" imgfield="img2" src="overrides/HardPy_files/HP.png"
+              data-animate-style="fadeindown" data-tu-max-width="800" data-tu-max-height="800"
+              data-hook-clogo="coverlogo">
+          </div>
+          <div class="text-hardpy-open" data-animate-style="fadeinup" field="title">
+            <span style="color: rgb(0, 255, 0);">HardPy</span>
+            <span>is an </span>
+            <span style="color: rgb(255, 255, 0);">open source</span>
+            <span> </span>
+            <span style="color: rgb(255, 0, 255);">python </span>
+            <span>package for creating </span>
+            <span style="color: rgb(0, 255, 255);">test benches</span>
+            <span> for devices</span>
+          </div>
+          <div class="batton_field align_center">
+            <div class="buttonwrapper">
+              <a href="https://everypinio.github.io/hardpy/" target="_blank" class="btn t-btn t-btn_md "
+                data-btneffects-first="btneffects-light" style="color:#ffffff;" data-buttonfieldset="button"
+                rel="noopener">
+                <table role="presentation" style="width:100%; height:100%;">
+                  <tbody>
+                    <tr>
+                      <td data-field="buttontitle">Get started</td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="t-btn_wrap-effects">
+                  <div class="t-btn_effects"></div>
+                </div>
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+
+      </div>
+    </div>
+
+
+  </div>
+  <div class="container_allows">
+    <div class="terminal_field_elem">
+      <div class="tn-atom" field="tn_text_1718120521638" style="line-height: 47px;">
+        <strong>
+          <span class="typing-text" data-top-limit="971.34375" data-bottom-limit="1463.34375">$ pip install
+            hardpy</span>
+          <!-- <span class="typed-cursor">|</span> -->
+        </strong>
+      </div>
+    </div>
+    <div class="hp_allows_str">
+      <h1 class="tn-atom" style="line-height: 47px;">
+        <span>HardPy</span>
+        <span style="color: rgb(255, 255, 0);">allows</span>
+        <span> you to: </span>
+        <strong>|</strong>
+      </h1>
+    </div>
+    <div class="hp_create_str">
+      <div class="tn-atom" style="line-height: 47px;">
+        <span>[ ]</span>
+        <span style="color: rgb(0, 255, 255);">Create test </span>
+        <span style="color: rgb(255, 255, 255);">benches</span>
+        <span>for devices using</span>
+        <span style="color: rgb(0, 255, 255);">pytest</span><span>;</span>
+      </div>
+    </div>
+    <div class="hp_use_str">
+      <div class="tn-atom" style="line-height: 47px;">
+        { }
+        <span style="color: rgb(0, 255, 0);">Use a browser</span>
+        <span>to view, start, stop, and interact with</span>
+        <span style="color: rgb(0, 255, 0);">tests</span><span>;</span>
+      </div>
+    </div>
+    <div class="hp_store_str">
+      <div class="tn-atom" style="line-height: 47px;">
+        <span>( )</span>
+        <span style="color: rgb(255, 0, 0);">Store </span>
+        <span>the test</span>
+        <span style="color: rgb(255, 0, 0);">result</span>
+        <span>to the</span>
+        <u style="color: rgb(255, 0, 0);"><a href="https://couchdb.apache.org/"
+            style="color: rgb(255, 0, 0);">CouchDB</a></u><span style="color: rgb(255, 0, 0);"> </span>
+        <span>database.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="features">
+    <div class="features_title_field">
+      <div class="features_title">
+        <span style="color: rgb(255, 0, 255);">Features_</span>
+      </div>
+    </div>
+    <ul role="list" class="features_container t-container">
+      <li
+        class="test_view_block t-col t-col_6 t-item t-list__item t-animate t-animate__chain_first-in-row t-animate_started t-animate__chain_showed"
+        data-animate-start-time="1735141158348" style="transition-delay: 0s;">
+        <div class="t499__title t-name t-name_xl" field="li_title__5747513453200">
+          <div style="font-size: 30px;" data-customstyle="yes"><span style="color: rgb(255, 255, 0);">Tests view in
+              browser_</span></div>
+        </div>
+        <div class="t499__blockdescr t-descr t-descr_xs" field="li_descr__5747513453200"><span
+            style="font-size: 22px; color: rgb(255, 255, 255);">HardPy includes a React application - HardPy
+            operator panel. It allows you to use a browser to view your tests and write test results to a
+            database.</span></div>
+      </li>
+      <li class="t499__col t-col t-col_6 t-item t-list__item t-animate t-animate_started"
+        data-animate-style="fadeinleft" data-animate-chain="yes" data-animate-start-time="1735141158508"
+        style="transition-delay: 0.16s;">
+        <div class="t499__title t-name t-name_xl" field="li_title__5747513453201">
+          <div style="font-size: 30px;" data-customstyle="yes"><span style="color: rgb(0, 255, 255);">Based on
+              pytest_</span></div>
+        </div>
+        <div class="t499__blockdescr t-descr t-descr_xs" field="li_descr__5747513453201">
+          <div style="font-size: 20px;" data-customstyle="yes"><span style="color: rgb(255, 255, 255);">HardPy
+              includes the pytest-hardpy plugin for pytest. Compatible with pytest versions above 7. You can run
+              tests not only through the operator panel but also through the pytest itself.</span></div>
+        </div>
+      </li>
+      <li
+        class="t499__col t-col t-col_6 t-item t-list__item t-animate t-animate__chain_first-in-row t-animate_started t-animate__chain_showed"
+        data-animate-style="fadeinleft" data-animate-chain="yes" data-animate-start-time="1735141159098"
+        style="transition-delay: 0s;">
+        <div class="t499__title t-name t-name_xl" field="li_title__5747513453202">
+          <div style="font-size: 30px;" data-customstyle="yes"><span style="color: rgb(0, 255, 0);">Document-oriented
+              NoSQL database_</span></div>
+        </div>
+        <div class="t499__blockdescr t-descr t-descr_xs" field="li_descr__5747513453202">
+          <div style="font-size: 20px;" data-customstyle="yes"><span
+              style="color: rgb(255, 255, 255); font-size: 20px;">HardPy uses CouchDB as its database but you can
+              write final result to any database because CouchDB stores data in a simple document. </span><span
+              style="color: rgb(255, 255, 255);">Developers can create their adapter for any database and store the
+              test report in a way that suits them. By default HardPy allows you to store all reports in CouchDB.
+              HardPy is compatible with CouchDB versions above 3.2.</span></div>
+        </div>
+      </li>
+      <li class="t499__col t-col t-col_6 t-item t-list__item t-animate t-animate_started"
+        data-animate-style="fadeinleft" data-animate-chain="yes" data-animate-start-time="1735141159258"
+        style="transition-delay: 0.16s;">
+        <div class="t499__title t-name t-name_xl" field="li_title__5747513453203">
+          <div style="font-size: 30px;" data-customstyle="yes"><span style="color: rgb(255, 0, 0);">Modern
+              python_</span></div>
+        </div>
+        <div class="t499__blockdescr t-descr t-descr_xs" field="li_descr__5747513453203">
+          <div style="font-size: 20px;" data-customstyle="yes"><span style="color: rgb(255, 255, 255);">HardPy is
+              based on the python 3.10 and supports versions 3.11, 3.12.</span></div>
+        </div>
+      </li>
+    </ul>
+    <div class="batton_field align_center">
+      <div class="buttonwrapper">
+        <a href="https://everypinio.github.io/hardpy/" target="_blank" class="btn t-btn t-btn_md "
+          style="color:#ffffff;">
+          <table role="presentation" style="width:100%; height:100%;">
+            <tbody>
+              <tr>
+                <td data-field="buttontitle">Get started</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="t-btn_wrap-effects">
+            <div class="t-btn_effects"></div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="two_blocks_field_1">
+    <div class="two_blocks_field_1_1">
+      <div class="t-container align_left">
+        <div class="blocks_field_col">
+          <ul class="block_titles">
+            <li class="button_1">
+              <button type="button" class="t817__tab-name t-name t-name_xs" tabindex="0">
+                <span style="color: rgb(0, 255, 0);">EXAMPLES OF USAGE</span></button>
+            </li>
+            <li class="button_2">
+              <button type="button" class="t817__tab-name t-name t-name_xs" tabindex="-1">
+                <span style="color: rgb(255, 0, 255);">WHAT CAN BE TESTED</span></button>
+            </li>
+          </ul>
+          <div class="t817__wrapper_mobile">
+            <div class="t817__firefoxfix" style="top: 1px;bottom: 1px;right: 1px;background-color: #eeeeee;"></div>
+            <select class="t817__select t-name" style="color: #000;border-color: #eeeeee;background-color: #eeeeee;"
+              data-tab-mobile-number="1">
+              <option class="t817__tab-name_mobile" value="1">EXAMPLES OF USAGE</option>
+              <option class="t817__tab-name_mobile" value="2">WHAT CAN BE TESTED</option>
+            </select>
+          </div>
+          <div class="t817__content-row">
+            <div id="content-tab1_841532374" class="t817__content t817__content_active" role="tabpanel"
+              data-tab-content-number="1" aria-labelledby="tab1_841532374" tabindex="0"
+              style=" background-color: #ffffff; border-width: 1px;">
+              <div class="t817__content-col t817__content-col_2"> <img class="t-img loaded"
+                  src="overrides/HardPy_files/photo_2024-12-10_11-.jpg"
+                  data-original="https://static.tildacdn.com/tild3662-6161-4730-b633-633466623363/photo_2024-12-10_11-.jpg"
+                  imgfield="li_img__3529444515830" alt=""> </div>
+              <div class="t817__content-col t817__content-col_2" style="padding-top:20px;padding-bottom:20px;">
+                <div class="t817__title t-heading t-heading_sm" field="li_title__3529444515830"></div>
+                <div class="t-text t-text_sm" field="li_text__3529444515830">Our forward-thinking colleagues are
+                  revolutionizing their testing experience with our StandCloud+HardPy tools!</div>
+              </div>
+            </div>
+            <div id="content-tab2_841532374" class="t817__content" role="tabpanel" data-tab-content-number="2"
+              aria-labelledby="tab2_841532374" tabindex="0" hidden=""
+              style=" background-color: #ffffff; border-width: 1px;">
+              <div class="t817__content-col t817__content-col_2"> <img class="t-img loaded"
+                  src="overrides/HardPy_files/photo_.jpg"
+                  data-original="https://static.tildacdn.com/tild3939-3663-4030-b162-393136356565/photo_.jpg"
+                  imgfield="li_img__2901444515831" alt=""> </div>
+              <div class="t817__content-col t817__content-col_2" style="padding-top:20px;padding-bottom:20px;">
+                <div class="t817__title t-heading t-heading_sm" field="li_title__2901444515831"></div>
+                <div class="t-text t-text_sm" field="li_text__2901444515831">This ecosystem slashes development time
+                  from months to weeks, enables 100% automated testing, and provides real-time insights for quality
+                  control.<br><br>Cut costs, boost efficiency, and catch issues early. Ready to transform your
+                  electronics testing? Check out Everypin - yours testing game-changer!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="latest_updates_block">
+    <div class="latest_updates_field align_center t-container">
+      <div class="latest_updates_title_field">
+        <div class="latest_updates_title">
+          <span style="font-family: Roboto; color: rgb(255, 255, 255);">
+            LATEST UPDATES
+          </span>
+        </div>
+      </div>
+      <div class="hp_version_field">
+        <span style="color: rgb(255, 255, 255);">🎉 </span>
+        <span style="color: rgb(255, 255, 255);">HardPy</span>
+        <a href="https://github.com/everypinio/hardpy/tree/0.8.0" target="_blank"
+          style="color: rgb(255, 0, 255);">0.8.0</a>
+        <span style="color: rgb(255, 255, 255);">is here! 🎉</span>
+
+        <p style="text-align: left;">
+          <span style="color: rgb(255, 255, 255); font-size: 20px;">✨ Modified the way to use
+            an image for widgets in the dialog box. Now users can add images to any widget using the </span><span
+            style="color: rgb(255, 255, 255); font-size: 20px; background-color: rgb(144, 144, 144);">ImageComponent</span><span
+            style="color: rgb(255, 255, 255); font-size: 20px;">.</span>
+        </p>
+
+        <p style="text-align: left;">
+          <span style="color: rgb(255, 255, 255); font-size: 20px;">✨ Introduced the
+            capability to add image borders within the dialog box.</span>
+        </p>
+
+        <p style="text-align: left;"><span style="color: rgb(255, 255, 255); font-size: 20px;">✨ Enhanced the user
+            interface of the operator panel.</span></p>
+
+      </div>
+
+      <img class="hp_release_img"
+        src="https://optim.tildacdn.com/tild3465-3138-4563-b331-666535396139/-/resize/475x/-/format/webp/December_18_2024_2_1.png"
+        data-original="https://static.tildacdn.com/tild3465-3138-4563-b331-666535396139/December_18_2024_2_1.png"
+        imgfield="img">
+    </div>
+
+
+
+  </div>
+
+  <div class="see_more_block">
+
+    <div class="t-container align_center">
+      <div class="t-col t-col_8 t-prefix_2">
+        <div class="see_more_title">
+          <span style="color: rgb(255, 255, 255); font-family: Roboto;">SOME MORE INFO</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="hp_info_block">
+    <div class="hp_info_field align_center">
+      <div class="hp_info_text" style="line-height: 47px;">
+        <span style="color: rgb(0, 255, 0);">HardPy </span>
+        is a part of 
+        <span style="color: rgb(255, 255, 0);">Everypin</span>
+        - cross-platform open source PCBA functional test bench automation system.
+        <br>
+        <br>
+        Open source 
+        <span style="color: rgb(255, 0, 255);">HardPy</span>
+          solution 
+          <span style="color: rgb(255, 0, 255);">for test bench automation</span>
+          and 
+          <u style="color: rgb(0, 255, 255);">
+            <a href="https://everypin.io/standcloud"
+            target="_blank" style="color: rgb(0, 255, 255);">StandCloud</a>
+          </u>
+          <span style="color: rgb(0, 255, 255);"> </span>for <span style="color: rgb(0, 255, 255);">management </span>to
+        control the test equipment fleet, store and analyze test data.
+      </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</body>
+{% endblock %}
+
+<!-- Content -->
+{% block content %}{% endblock %}
+
+<!-- Application footer -->
+{% block footer %}{% endblock %}
